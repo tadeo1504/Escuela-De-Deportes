@@ -35,6 +35,5 @@ id_clase int,
 ci_alumno int,
 id_equipamiento int,
 foreign key (id_clase) references clase(id),
-foreign key (ci_alumno) references alumnos(ci),
-foreign key (id_equipamiento) references equipamiento(id)
+foreign key (ci_alumno) references alumnos(ci)
 );

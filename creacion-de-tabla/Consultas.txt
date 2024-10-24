@@ -1,0 +1,168 @@
+
+Las consultas de SQL Server
+
+En un comienzo, la escuela contara con 3 actividades: snowboard, ski y moto de nieve. Estas actividades tienen un costo asociado y una restricción de edad.
+create table actividades(
+id int primary key IDENTITY(1,1),
+descripcion varchar(50),
+costo int,
+requisitoEdad int
+);
+
+INSERT into actividades VALUES 
+('snowboard' , 1500, 18 ),
+('ski', 2000, 20),
+('moto de nieve', 2500, 23);
+
+hice cambios en las creaciones de las tablas ejemplo use IDENTITY (1,1)  y agregue un requisito de edad minima que usare con int
+
+----
+
+La escuela tiene varios instructores ―no especializados, es decir, pueden dar clase de cualquier actividad― 
+
+create table instructores(
+ci int primary key,
+nombre varchar(15),
+apellido varchar(15)
+);
+
+ACA PUEDE IR UNA OPCION PARA AGREGAR PROFESORES 
+INSERT INTO instructores VALUES 
+(nombreProfesor , apellidoProfesor);
+
+los cuales ofrecen los siguientes turnos para las clases:
+-- MODIFIQUE EL INT POR TIME , EJEMPLO : ('14:30:00');
+
+create table turnos(
+id int primary key IDENTITY(1,1),
+hora_inicio TIME,
+hora_final TIME
+);
+
+INSERT INTO turnos VALUES
+('09:00:00', '11:00:00'),
+('12:00:00', '14:00:00');
+('16:00:00','18:00:00');
+
+
+Estas clases pueden ser grupales o individuales.
+
+-- CREAR CLASE para usar en UNA OPCION 
+
+create table clase(
+ci_instructor int,
+id_actividad int,
+id_turno int ,
+dictada bit,
+id int primary key,
+foreign key (id_actividad) references actividades(id),
+foreign key (ci_instructor) references instructores(ci),
+foreign key (id_turno) references turnos(id)
+);
+
+
+
+
+
+De los alumnos interesa guardar la siguiente información:
+•CI
+•Nombre
+•Apellido
+•Fecha de nacimiento
+•Teléfono de contacto
+•Correo electrónico
+
+--ACA TUVE AQUE AGREGAR COSAS A LA TABLA ALUMNOS PORQUE NO PEDIA NADA DE LO DE ARRIBA igual dice = (En caso de que considere necesario, se pueden crear tablas adicionales o agregar atributos.)
+
+create table alumnos(
+ci int primary key,
+nombre varchar(255),
+apellido varchar(255),
+fechaNacimiento DATE,
+telefono int,
+email varchar(255)
+);
+
+
+alquiler de equipo ―desde antiparras, cascos, tablas de snowboard, esquíes, etc.
+CREATE TABLE AlquilerEquipo (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    TipoEquipo VARCHAR(50),
+    Marca VARCHAR(50),
+    Talla VARCHAR(10),
+    Precio DECIMAL(10, 2),
+    FechaAlquiler DATE,
+    FechaDevolucion DATE
+);
+INSERT INTO AlquilerEquipo (TipoEquipo, Marca, Talla, Precio, FechaAlquiler, FechaDevolucion)
+VALUES 
+('Antiparras', 'Oakley', 'M', 15.00, '2024-12-01', '2024-12-05');
+
+
+Con respecto a las clases, en el día de la fecha, es importante tener en cuenta que un instructor no puede dar 2 clases en el mismo turno y 
+que un alumno no puede estar inscripto en 2 clases distintas en el mismo turno. Además, las clases no pueden ser modificadas ni eliminadas 
+durante el horario de esta, únicamente se pueden alterar antes o después de la misma. Los datos que se pueden modificar son:
+•Instructor que da la clase
+•Turno
+•Agregar y quitar alumnos de las clases grupales
+
+CREATE TABLE Clases (
+    ClaseID INT PRIMARY KEY IDENTITY(1,1),
+    InstructorID INT NOT NULL,
+    Turno NVARCHAR(50) NOT NULL,
+    Fecha DATETIME NOT NULL,
+    Alumnos NVARCHAR(MAX), -- Aquí se almacenarán los IDs de los alumnos como una lista (no ideal, pero para simplificar)
+    CONSTRAINT UQ_Clase UNIQUE (Fecha, Turno, InstructorID) -- Un instructor no puede dar 2 clases en el mismo turno
+);
+INSERT INTO Clases (InstructorID, Turno, Fecha, Alumnos)
+VALUES (1, 'Mañana', '2024-10-23 09:00:00', '1,2,3'); -- Asumiendo que los IDs de los alumnos son 1, 2 y 3
+
+
+EJEMPLO
+ -- Obtener el turno y fecha de la clase
+    SELECT @Turno = Turno, @Fecha = Fecha, @Alumnos = Alumnos FROM Clases WHERE ClaseID = @ClaseID;
+
+    -- Verificar si el alumno ya está inscrito en otra clase en el mismo turno
+    IF EXISTS (
+        SELECT 1
+        FROM Clases
+        WHERE CHARINDEX(CONVERT(NVARCHAR, @AlumnoID), Alumnos) > 0
+        AND Turno = @Turno
+        AND Fecha = @Fecha
+    )
+    BEGIN
+        RAISERROR('El alumno ya está inscrito en otra clase en el mismo turno.', 16, 1);
+        RETURN;
+    END
+
+    -- Agregar el alumno a la lista
+    SET @Alumnos = CASE WHEN @Alumnos IS NULL OR @Alumnos = '' 
+                        THEN CONVERT(NVARCHAR, @AlumnoID) 
+                        ELSE @Alumnos + ',' + CONVERT(NVARCHAR, @AlumnoID) 
+                   END;
+
+    -- Actualizar la clase con el nuevo alumno
+    UPDATE Clases
+    SET Alumnos = @Alumnos
+    WHERE ClaseID = @ClaseID;
+END;
+
+
+
+
+
+Con el fin de evaluar el éxito de la escuela, se solicita además un sistema de reportes donde se pueda consultar:
+•Actividades que más ingresos generan – se debe sumar el costo de equipamiento
+•Actividades con más alumnos
+•Los turnos más con más clases dictadas
+
+
+
+
+OBJETIVO : 
+
+La UCU está buscando implementar un primer acercamiento a un sistema administrativo, que facilite a los administrativos de la escuela:
+•Alta, baja y modificación (ABM) de instructores
+•ABM de turnos
+•Modificación de las actividades
+•ABM de alumnos
