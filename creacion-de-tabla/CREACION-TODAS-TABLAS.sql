@@ -1,4 +1,13 @@
+create table actividades(
+id int primary key,
+descripcion varchar(50),
+costo int
+);
 
+CREATE TABLE login (
+correo varchar(20) primary key,
+contraseña varchar(20),
+);
 
 create table instructores(
 ci int primary key,
@@ -8,8 +17,8 @@ apellido varchar(15)
 
 create table turnos(
 id int primary key,
-hora_inicio int,
-hora_final int
+hora_inicio time,
+hora_final time
 );
 
 create table alumnos(
@@ -23,7 +32,7 @@ create table clase(
 ci_instructor int,
 id_actividad int,
 id_turno int,
-dictada bit,
+dictada date,
 id int primary key,
 foreign key (id_actividad) references actividades(id),
 foreign key (ci_instructor) references instructores(ci),
