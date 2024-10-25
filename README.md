@@ -1,4 +1,4 @@
-<h1 align="center">Juegos de Inviernos <br>UCU</h1>
+<h1 align="center">Juegos de Invierno <br>UCU</h1>
 
 ###
 
