@@ -2,14 +2,15 @@ import pyodbc
 
 class EscuelaDeportesNieve:
 
+    #Guillermo 
     @staticmethod
     def conectar_bd():
         try:
             conexion = pyodbc.connect(
-                'DRIVER={ODBC Driver 17 for SQL Server};'
-                'SERVER=DESKTOP-8L3U16R;'
-                'DATABASE=ObligatorioBD;'
-                'Trusted_Connection=yes;'
+                'DRIVER={SQL Server};'
+                'SERVER=LAPTOP-K7AU665T;'  
+                'DATABASE=Obligatorio;'      
+                'Trusted_Connection=yes;' 
             )
             return conexion
         except pyodbc.Error as e:
@@ -40,79 +41,8 @@ def submenuReportes(): #FALTA BUSCAR UN GENERADOR DE PDF PARA SACAR LOS REPORTES
             print("Opción no válida. Intente nuevamente.")
 
 
-def altaInstructor():
-    print("Ingrese CI:")
-    ci = input()  
-    print("Ingrese el nombre:")
-    nombre = input()  
-    print("Ingrese el apellido:")
-    apellido = input()  
-    print("Instructor registrado con éxito.")
-    # Conectar a la base de datos
-    conexion = EscuelaDeportesNieve.conectar_bd()
-    cursor = conexion.cursor()
 
-    # Ejecutar el INSERT
-    try:
-        cursor.execute("""
-            INSERT INTO instructores (ci, nombre, apellido)
-            VALUES (?, ?, ?)
-        """, (ci, nombre, apellido))
-        conexion.commit()  # Confirmar los cambios
-        print("Instructor registrado con éxito.")
-    except Exception as e:
-        print("Error al registrar el instructor:", e)
-    finally:
-        cursor.close()
-        conexion.close()
-#-------------------------------------------------------------------------------------------
 
-def bajaInstructor():
-    print("Ingrese CI del instructor a dar de baja:")
-    ci = input()
-    print("Instructor dado de baja con éxito.")
-     # Conectar a la base de datos
-    conexion = EscuelaDeportesNieve.conectar_bd()
-    cursor = conexion.cursor()
-
-    # Ejecutar el DELETE
-    try:
-        cursor.execute("""
-            DELETE FROM instructores
-            WHERE ci = ?
-        """, (ci,))
-        conexion.commit()  # Confirmar los cambios
-        if cursor.rowcount > 0:
-            print("Instructor dado de baja con éxito.")
-        else:
-            print("No se encontró ningún instructor con ese CI.")
-    except Exception as e:
-        print("Error al dar de baja el instructor:", e)
-    finally:
-        cursor.close()
-        conexion.close()
-#-------------------------------------------------------------------------------------------
-
-def modificarInstructor():
-    print("Ingrese CI del instructor a modificar:")
-    ci = input() 
-    print("Ingrese nuevo nombre (dejar vacío si no desea cambiar):")
-    nuevo_nombre = input()  
-    print("Ingrese nuevo apellido (dejar vacío si no desea cambiar):")
-    nuevo_apellido = input()
-    print("Datos del instructor actualizados con éxito.")
-    # ACA PUEDE MODIFICAR TODO O NADA
-
-def verInstructores():
-    conexion = EscuelaDeportesNieve.conectar_bd()
-    if conexion:
-        cursor = conexion.cursor()
-        query = "SELECT * FROM instructores;"
-        cursor.execute(query)
-        for row in cursor.fetchall():
-            print(row)
-        cursor.close()
-        conexion.close()
 
 def submenuABMinstructores():
     while True:
