@@ -1,3 +1,4 @@
+"""
 create table actividades(
 id int primary key,
 descripcion varchar(50),
@@ -6,7 +7,7 @@ costo int
 
 CREATE TABLE login (
 correo varchar(20) primary key,
-contraseña varchar(20),
+contraseï¿½a varchar(20),
 );
 
 create table instructores(
@@ -47,3 +48,4 @@ foreign key (id_clase) references clase(id),
 foreign key (ci_alumno) references alumnos(ci),
 foreign key (id_equipamiento) references equipamiento(id)
 );
+"""

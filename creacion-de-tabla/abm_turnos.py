@@ -1,39 +1,73 @@
 # Obligatorio/abm_turnos.py
-from escuela_deportes_nieve import EscuelaDeportesNieve
+from db_connection import DBConnection
 
 class ABMTurnos:
 
     @staticmethod
     def altaTurnos():
-        print("Ingrese el horario:")
-        horario = input()
-        print("Ingrese la fecha (DD/MM/AAAA):")
-        fecha = input()
-        print("Turno registrado con éxito.")
+        id = 0
+        print("Ingrese la hora de inicio (HH:MM):")
+        hora_inicio = input()  
+        print("Ingrese la hora final (HH:MM):")
+        hora_final = input()   
+        print("Ingrese el turno del 1 al 4")
+        id = input()
+        print("")
+        conexion = DBConnection.conectar_bd()
+        try:
+            conexion = DBConnection.conectar_bd()
+            if conexion:
+                cursor = conexion.cursor()
+                cursor.execute("SELECT COUNT(*) FROM turnos WHERE id = ?", (id,))
+                existe = cursor.fetchone()[0]
+                if existe > 0:
+                    print("No se puede registrar el turno porque ya existe un horario para ese ID.")
+                else:
+                    cursor.execute("INSERT INTO turnos (id, hora_inicio, hora_final) VALUES (?, ?, ?)", (id, hora_inicio, hora_final))
+                    conexion.commit()
+                    print("Turno registrado con éxito.")
+        except Exception as e:
+            print(f"Ocurrió un error al registrar el turno: {e}")
+        finally:
+            cursor.close()
+            conexion.close()
 
     @staticmethod
     def bajaTurnos():
-        print("Ingrese el horario del turno a dar de baja:")
-        horario = input()
-        print("Ingrese la fecha del turno a dar de baja:")
-        fecha = input()
+        print("Ingrese el id del turno a dar de baja:")
+        idbaja = input()
         print("Turno dado de baja con éxito.")
+        conexion = DBConnection.conectar_bd()
+        if conexion:
+            cursor = conexion.cursor()
+            cursor.execute("DELETE FROM turnos WHERE id = ?", (idbaja))
+            conexion.commit()
+            cursor.close()
+            conexion.close()
 
     @staticmethod
     def modificarTurnos():
-        print("Ingrese el horario del turno a modificar:")
-        horario = input()
-        print("Ingrese la fecha del turno a modificar:")
-        fecha = input()
-        print("Ingrese el nuevo horario (dejar vacío si no desea cambiar):")
-        nuevo_horario = input()
-        print("Ingrese la nueva fecha (dejar vacío si no desea cambiar):")
-        nueva_fecha = input()
+        print("Ingrese el id del turno a modificar:")
+        id = input()
+        print("Ingrese el nuevo horario de inicio (dejar vacío si no desea cambiar):")
+        hora_inicio = input()
+        print("Ingrese el nuevo horario final (dejar vacío si no desea cambiar):")
+        hora_final = input()
         print("Datos del turno actualizados con éxito.")
+        conexion = DBConnection.conectar_bd()
+        if conexion:
+            cursor = conexion.cursor()
+            if hora_inicio:
+                cursor.execute("UPDATE turnos SET hora_inicio = ? WHERE id = ?", (hora_inicio, id))
+            if hora_final:
+                cursor.execute("UPDATE turnos SET hora_final = ? WHERE id = ?", (hora_final, id))
+            conexion.commit()
+            cursor.close()
+            conexion.close()
 
     @staticmethod
     def verTurnos():
-        conexion = EscuelaDeportesNieve.conectar_bd()
+        conexion = DBConnection.conectar_bd()
         if conexion:
             cursor = conexion.cursor()
             cursor.execute("SELECT * FROM turnos")

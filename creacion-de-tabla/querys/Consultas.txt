@@ -60,10 +60,6 @@ foreign key (ci_instructor) references instructores(ci),
 foreign key (id_turno) references turnos(id)
 );
 
-
-
-
-
 De los alumnos interesa guardar la siguiente información:
 •CI
 •Nombre

@@ -17,22 +17,23 @@ apellido varchar(15)
 
 create table turnos(
 id int primary key IDENTITY(1,1),
-hora_inicio time,
-hora_final time
+hora_inicio VARCHAR(30),
+hora_final VARCHAR(30)
 );
+
 
 create table alumnos(
 ci int primary key,
 nombre varchar(15),
 apellido varchar(15),
-fecha_naciemiento date
+fecha_nacimiento date
 );
 
 create table clase(
 ci_instructor int,
 id_actividad int,
 id_turno int IDENTITY(1,1),
-dictada date,
+dictada VARCHAR(15),
 id int primary key IDENTITY(1,1),
 foreign key (id_actividad) references actividades(id),
 foreign key (ci_instructor) references instructores(ci),

@@ -1,5 +1,6 @@
 # Obligatorio/abm_instructores.py
-from escuela_deportes_nieve import EscuelaDeportesNieve
+
+from db_connection import DBConnection
 
 class ABMInstructores:
 
@@ -11,8 +12,7 @@ class ABMInstructores:
         nombre = input()
         print("Ingrese el apellido:")
         apellido = input()
-        
-        conexion = EscuelaDeportesNieve.conectar_bd()
+        conexion = DBConnection.conectar_bd()
         cursor = conexion.cursor()
         try:
             cursor.execute("INSERT INTO instructores (ci, nombre, apellido) VALUES (?, ?, ?)", (ci, nombre, apellido))
@@ -29,7 +29,7 @@ class ABMInstructores:
         print("Ingrese CI del instructor a dar de baja:")
         ci = input()
         
-        conexion = EscuelaDeportesNieve.conectar_bd()
+        conexion = DBConnection.conectar_bd()
         cursor = conexion.cursor()
         try:
             cursor.execute("DELETE FROM instructores WHERE ci = ?", (ci,))
@@ -53,10 +53,23 @@ class ABMInstructores:
         print("Ingrese nuevo apellido (dejar vacío si no desea cambiar):")
         nuevo_apellido = input()
         print("Datos del instructor actualizados con éxito.")
+        conexion = DBConnection.conectar_bd()
+        cursor = conexion.cursor()
+        try:
+            if nuevo_nombre:
+                cursor.execute("UPDATE instructores SET nombre = ? WHERE ci = ?", (nuevo_nombre, ci))
+            if nuevo_apellido:
+                cursor.execute("UPDATE instructores SET apellido = ? WHERE ci = ?", (nuevo_apellido, ci))
+            conexion.commit()
+        except Exception as e:
+            print("Error al modificar el instructor:", e)
+        finally:
+            cursor.close()
+            conexion.close()
 
     @staticmethod
     def verInstructores():
-        conexion = EscuelaDeportesNieve.conectar_bd()
+        conexion = DBConnection.conectar_bd()
         if conexion:
             cursor = conexion.cursor()
             cursor.execute("SELECT * FROM instructores")

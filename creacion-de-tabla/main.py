@@ -1,9 +1,6 @@
 # main.py
-from abm_instructores import ABMInstructores
-from abm_alumnos import ABMAlumnos
-from abm_turnos import ABMTurnos
-from gestion_clases import GestionClases
-from modificaciones_actividades import ModificacionesActividades
+from escuela_deportes_nieve import EscuelaDeportesNieve
+from db_connection import DBConnection
 
 def menu():
     while True:
@@ -13,24 +10,27 @@ def menu():
         print("3. ABM de Alumnos")
         print("4. Modificación de Actividades")
         print("5. Gestión de Clases")
-        print("6. Salir")
+        print("6. Reportes")
+        print("7. Salir")
         opcion = int(input("Seleccione una opción: "))
-        
         if opcion == 1:
-            ABMInstructores.altaInstructor() # Usar métodos de ABMInstructores
+            EscuelaDeportesNieve.submenuABMinstructores()
         elif opcion == 2:
-            ABMTurnos.altaTurnos()  # Usar métodos de ABMTurnos
+            EscuelaDeportesNieve.submenuABMturnos()
         elif opcion == 3:
-            ABMAlumnos.altaAlumno()  # Usar métodos de ABMAlumnos
+            EscuelaDeportesNieve.submenuABMalumnos()
         elif opcion == 4:
-            ModificacionesActividades.modificarDeportes()  # Usar métodos de ModificacionesActividades
+            EscuelaDeportesNieve.submenuModificacionesActividades()
         elif opcion == 5:
-            GestionClases.asignarInstructores()  # Usar métodos de GestionClases
+            EscuelaDeportesNieve.submenuGestionClases()
         elif opcion == 6:
+            EscuelaDeportesNieve.submenuReportes()
+        elif opcion == 7:
             print("Salir")
             break
         else:
             print("Opción no válida. Intente nuevamente.")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     menu()
