@@ -1,6 +1,7 @@
 # app/app.py
 
 from flask import Flask
+from flask_cors import CORS  # Importar CORS
 from .routes.alumnos_routes import alumnos_bp
 # from app.routes.instructores_routes import instructores_bp
 # from app.routes.clases_routes import clases_bp
@@ -10,7 +11,8 @@ from .routes.alumnos_routes import alumnos_bp
 def create_app():
     # Crea una instancia de la aplicación Flask
     app = Flask(__name__)
-    
+    CORS(app)  # Habilitar CORS en toda la aplicación
+
     # Configuración de la aplicación (si tienes configuraciones especiales)
     # app.config['DEBUG'] = True  # Ejemplo de configuración
 
