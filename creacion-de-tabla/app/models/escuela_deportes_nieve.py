@@ -1,6 +1,6 @@
 import pyodbc
 
-from db_connection import DBConnection
+from app.db_connection import DBConnection
 from abm_instructores import ABMInstructores
 from abm_turnos import ABMTurnos
 from abm_alumnos import ABMAlumnos
