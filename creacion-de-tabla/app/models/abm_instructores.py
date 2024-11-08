@@ -1,6 +1,6 @@
 # Obligatorio/abm_instructores.py
 
-from db_connection import DBConnection
+from app.db_connection import DBConnection
 
 class ABMInstructores:
 

@@ -1,5 +1,5 @@
 # Obligatorio/gestion_clases.py
-from db_connection import DBConnection
+from app.db_connection import DBConnection
 
 class GestionClases:
 

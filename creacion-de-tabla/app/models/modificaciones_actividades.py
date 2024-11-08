@@ -1,5 +1,5 @@
 # Obligatorio/modificaciones_actividades.py
-from db_connection import DBConnection
+from app.db_connection import DBConnection
 
 
 class ModificacionesActividades:

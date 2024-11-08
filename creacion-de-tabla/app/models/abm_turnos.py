@@ -1,5 +1,5 @@
 # Obligatorio/abm_turnos.py
-from db_connection import DBConnection
+from app.db_connection import DBConnection
 
 class ABMTurnos:
 

@@ -1,6 +1,6 @@
 # main.py
 from escuela_deportes_nieve import EscuelaDeportesNieve
-from db_connection import DBConnection
+from app.db_connection import DBConnection
 
 def menu():
     while True:
