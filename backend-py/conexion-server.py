@@ -2,7 +2,7 @@ import pyodbc
 #hay q hacer pip install pyodbc
 
 # Configura tu conexión
-server = 'LAPTOP-OMEVDG9L'
+server = 'LAPTOP-K7AU665T'
 database = 'OBLIGATORIO'     
 connection_string = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
 

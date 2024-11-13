@@ -1,79 +1,73 @@
-# Obligatorio/abm_instructores.py
+# app/models/abm_instructores.py
 
 from app.db_connection import DBConnection
 
 class ABMInstructores:
 
     @staticmethod
-    def altaInstructor():
-        print("Ingrese CI:")
-        ci = input()
-        print("Ingrese el nombre:")
-        nombre = input()
-        print("Ingrese el apellido:")
-        apellido = input()
+    def altaInstructor(ci, nombre, apellido):
         conexion = DBConnection.conectar_bd()
-        cursor = conexion.cursor()
-        try:
+        if conexion:
+            cursor = conexion.cursor()
             cursor.execute("INSERT INTO instructores (ci, nombre, apellido) VALUES (?, ?, ?)", (ci, nombre, apellido))
             conexion.commit()
-            print("Instructor registrado con éxito.")
-        except Exception as e:
-            print("Error al registrar el instructor:", e)
-        finally:
             cursor.close()
             conexion.close()
 
     @staticmethod
-    def bajaInstructor():
-        print("Ingrese CI del instructor a dar de baja:")
-        ci = input()
-        
+    def bajaInstructor(ci):
         conexion = DBConnection.conectar_bd()
-        cursor = conexion.cursor()
-        try:
+        if conexion:
+            cursor = conexion.cursor()
             cursor.execute("DELETE FROM instructores WHERE ci = ?", (ci,))
             conexion.commit()
-            if cursor.rowcount > 0:
-                print("Instructor dado de baja con éxito.")
-            else:
-                print("No se encontró ningún instructor con ese CI.")
-        except Exception as e:
-            print("Error al dar de baja el instructor:", e)
-        finally:
             cursor.close()
             conexion.close()
 
     @staticmethod
-    def modificarInstructor():
-        print("Ingrese CI del instructor a modificar:")
-        ci = input()
-        print("Ingrese nuevo nombre (dejar vacío si no desea cambiar):")
-        nuevo_nombre = input()
-        print("Ingrese nuevo apellido (dejar vacío si no desea cambiar):")
-        nuevo_apellido = input()
-        print("Datos del instructor actualizados con éxito.")
+    def modificarInstructor(ci, nuevo_nombre, nuevo_apellido):
         conexion = DBConnection.conectar_bd()
-        cursor = conexion.cursor()
-        try:
+        if conexion:
+            cursor = conexion.cursor()
             if nuevo_nombre:
                 cursor.execute("UPDATE instructores SET nombre = ? WHERE ci = ?", (nuevo_nombre, ci))
             if nuevo_apellido:
                 cursor.execute("UPDATE instructores SET apellido = ? WHERE ci = ?", (nuevo_apellido, ci))
             conexion.commit()
-        except Exception as e:
-            print("Error al modificar el instructor:", e)
-        finally:
             cursor.close()
             conexion.close()
+   
 
     @staticmethod
     def verInstructores():
         conexion = DBConnection.conectar_bd()
+        instructores = []
         if conexion:
             cursor = conexion.cursor()
             cursor.execute("SELECT * FROM instructores")
-            for row in cursor.fetchall():
-                print(row)
+            instructores = [dict(ci=row[0], nombre=row[1], apellido=row[2]) for row in cursor.fetchall()]
             cursor.close()
             conexion.close()
+        return instructores
+
+    
+
+
+    @staticmethod
+    def verInstructorPorCI(ci):
+        conexion = DBConnection.conectar_bd()
+        instructor = None
+        if conexion:
+            cursor = conexion.cursor()
+            cursor.execute("SELECT * FROM instructores WHERE ci = ?", (ci,))
+            row = cursor.fetchone()
+            if row:
+                instructor = {
+                    "ci": row[0],
+                    "nombre": row[1],
+                    "apellido": row[2],
+                }
+            cursor.close()
+            conexion.close()
+        print(instructor)
+        return instructor

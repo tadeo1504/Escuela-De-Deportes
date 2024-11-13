@@ -44,3 +44,11 @@ def modificar_alumno(ci):
 def ver_alumnos():
     alumnos = ABMAlumnos.verAlumnos()
     return jsonify({"alumnos": alumnos}), 200
+
+# Endpoint para ver un alumno en específico
+@alumnos_bp.route('/alumnos/<ci>', methods=['GET'])
+def ver_alumno_ci(ci):
+    alumno = ABMAlumnos.verAlumnoPorCI(ci)
+    if alumno:
+        return jsonify({"alumnos": alumno}), 200
+    return jsonify({"error": "Alumno no encontrado"}), 404

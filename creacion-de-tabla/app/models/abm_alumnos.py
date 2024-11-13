@@ -36,6 +36,24 @@ class ABMAlumnos:
             conexion.commit()
             cursor.close()
             conexion.close()
+    @staticmethod
+    def verAlumnoPorCI(ci):
+        conexion = DBConnection.conectar_bd()
+        alumno = None
+        if conexion:
+            cursor = conexion.cursor()
+            cursor.execute("SELECT * FROM alumnos WHERE ci = ?", (ci,))
+            row = cursor.fetchone()
+            if row:
+                alumno = {
+                    "ci": row[0],
+                    "nombre": row[1],
+                    "apellido": row[2],
+                    "fecha_nacimiento": row[3]
+                }
+            cursor.close()
+            conexion.close()
+        return alumno
 
     @staticmethod
     def verAlumnos():
@@ -48,3 +66,6 @@ class ABMAlumnos:
             cursor.close()
             conexion.close()
         return alumnos
+
+    
+
