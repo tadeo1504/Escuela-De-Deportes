@@ -32,10 +32,10 @@ def baja_alumno(ci):
 @alumnos_bp.route('/alumnos/<ci>', methods=['PUT'])
 def modificar_alumno(ci):
     data = request.get_json()
-    nuevo_nombre = data.get('nuevo_nombre', '')
-    nuevo_apellido = data.get('nuevo_apellido', '')
+    nombre = data.get('nombre', '')
+    apellido = data.get('apellido', '')
 
-    ABMAlumnos.modificarAlumno(ci, nuevo_nombre, nuevo_apellido)
+    ABMAlumnos.modificarAlumno(ci, nombre, apellido)
     return jsonify({"message": "Datos del alumno actualizados con éxito"}), 200
 
 
