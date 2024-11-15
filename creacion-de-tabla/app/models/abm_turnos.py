@@ -26,7 +26,7 @@ class ABMTurnos:
         cursor = conexion.cursor()
         try:
             cursor.execute("SELECT * FROM turnos")
-            return [{"id": row[0], "hora_inicio": row[1], "hora_final": row[2]} for row in cursor.fetchall()]
+            return [{"id": row[0], "hora_inicio": str(row[1])[:5], "hora_final": str(row[2])[:5]} for row in cursor.fetchall()]
         except Exception as e:
             raise Exception(f"Error al mostrar todos los turnos: {e}")
         finally:

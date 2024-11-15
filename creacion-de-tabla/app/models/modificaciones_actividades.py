@@ -1,3 +1,5 @@
+from app.db_connection import DBConnection
+
 class ModificacionesActividades:
     @staticmethod
     def agregarDeportes(id, nombre, costo):

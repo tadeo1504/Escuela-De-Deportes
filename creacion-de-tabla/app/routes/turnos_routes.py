@@ -3,12 +3,13 @@ from app.models.abm_turnos import ABMTurnos
 
 turnos_bp = Blueprint('turnos', __name__)
 
-@turnos_bp.route('/api/turnos', methods=['GET'])
+@turnos_bp.route('/turnos', methods=['GET'])
 def obtener_turnos():
     turnos = ABMTurnos.verTurnos()
+    print(turnos)
     return jsonify(turnos)
 
-@turnos_bp.route('/api/turnos', methods=['POST'])
+@turnos_bp.route('/turnos', methods=['POST'])
 def agregar_turno():
     data = request.get_json()
     id_turno = data.get('id')
@@ -21,7 +22,7 @@ def agregar_turno():
     ABMTurnos.altaTurnos(id_turno, hora_inicio, hora_final)
     return jsonify({"mensaje": "Turno agregado exitosamente"}), 201
 
-@turnos_bp.route('/api/turnos/<int:id>', methods=['PUT'])
+@turnos_bp.route('/turnos/<int:id>', methods=['PUT'])
 def modificar_turno(id):
     data = request.get_json()
     hora_inicio = data.get('hora_inicio')
@@ -30,7 +31,7 @@ def modificar_turno(id):
     ABMTurnos.modificarTurnos(id, hora_inicio, hora_final)
     return jsonify({"mensaje": "Turno modificado exitosamente"}), 200
 
-@turnos_bp.route('/api/turnos/<int:id>', methods=['DELETE'])
+@turnos_bp.route('/turnos/<int:id>', methods=['DELETE'])
 def eliminar_turno(id):
     ABMTurnos.bajaTurnos(id)
     return jsonify({"mensaje": "Turno eliminado exitosamente"}), 200

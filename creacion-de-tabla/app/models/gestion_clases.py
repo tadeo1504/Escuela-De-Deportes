@@ -4,24 +4,25 @@ from app.db_connection import DBConnection
 class GestionClases:
 
     @staticmethod
-    def crearClase():
-        print("Para crear la clase ya debe tener registrado al instructor a cargo, actividad a realizar, el turno, y saber si va a ser clase activa")
-        print("Ingrese la CI del Instructor:")
-        ci_instructor = input()
-        print("Ingrese el id de la Actividad:")
-        id_actividad = input()
-        print("Ingrese el id del turno que se va a realizar")
-        id_turno = input()
-        print("Ingrese si para dar como activa o no para colocarla como inactiva a la clase")
-        dictada = input()
-        print("Instructor asignado con éxito.")
+    def crearClase(ci_instructor, id_actividad, id_turno, dictada, id_clase):
+        """
+        Crea una nueva clase en la base de datos con los valores proporcionados.
+
+        :param ci_instructor: CI del instructor.
+        :param id_actividad: ID de la actividad.
+        :param id_turno: ID del turno.
+        :param dictada: Estado de la clase ("si" para activa, "no" para inactiva).
+        :param id_clase: ID de la clase (debe ser único).
+        """
+        print("Para crear la clase, asegúrese de que el instructor, la actividad y el turno estén registrados.")
+
         conexion = DBConnection.conectar_bd()
         if conexion:
             cursor = conexion.cursor()
             try:
                 cursor.execute(
-                    "INSERT INTO clase (ci_instructor, id_actividad, id_turno, dictada) VALUES (?, ?, ?, ?)",
-                    (ci_instructor, id_actividad, id_turno, dictada)
+                    "INSERT INTO clase (id, ci_instructor, id_actividad, id_turno, dictada) VALUES (?, ?, ?, ?, ?)",
+                    (id_clase, ci_instructor, id_actividad, id_turno, dictada)
                 )
                 conexion.commit()
                 print("Clase creada con éxito.")
@@ -30,6 +31,8 @@ class GestionClases:
             finally:
                 cursor.close()
                 conexion.close()
+
+
             
     @staticmethod
     def eliminarClase():
