@@ -17,8 +17,8 @@ apellido varchar(15)
 
 create table turnos(
 id int primary key IDENTITY(1,1),
-hora_inicio VARCHAR(30),
-hora_final VARCHAR(30)
+hora_inicio TIME,
+hora_final TIME
 );
 
 
@@ -32,8 +32,8 @@ fecha_nacimiento date
 create table clase(
 ci_instructor int,
 id_actividad int,
-id_turno int IDENTITY(1,1),
-dictada VARCHAR(15),
+id_turno int ,
+dictada DATE,
 id int primary key IDENTITY(1,1),
 foreign key (id_actividad) references actividades(id),
 foreign key (ci_instructor) references instructores(ci),
@@ -43,8 +43,16 @@ foreign key (id_turno) references turnos(id)
 create table alumno_clase(
 id_clase int IDENTITY(1,1),
 ci_alumno int,
-id_equipamiento int IDENTITY(1,1),
+id_equipamiento int ,
 foreign key (id_clase) references clase(id),
 foreign key (ci_alumno) references alumnos(ci),
 foreign key (id_equipamiento) references equipamiento(id)
+);
+
+create table equipamiento(
+id int primary key IDENTITY(1,1) ,
+id_actividad int,
+descripcion varchar(30),
+costo int,
+foreign key (id_actividad) references actividades(id),
 );
