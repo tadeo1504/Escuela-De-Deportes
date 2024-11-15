@@ -32,10 +32,10 @@ def baja_alumno(ci):
 @alumnos_bp.route('/alumnos/<ci>', methods=['PUT'])
 def modificar_alumno(ci):
     data = request.get_json()
-    nuevo_nombre = data.get('nuevo_nombre', '')
-    nuevo_apellido = data.get('nuevo_apellido', '')
+    nombre = data.get('nombre', '')
+    apellido = data.get('apellido', '')
 
-    ABMAlumnos.modificarAlumno(ci, nuevo_nombre, nuevo_apellido)
+    ABMAlumnos.modificarAlumno(ci, nombre, apellido)
     return jsonify({"message": "Datos del alumno actualizados con éxito"}), 200
 
 
@@ -44,3 +44,11 @@ def modificar_alumno(ci):
 def ver_alumnos():
     alumnos = ABMAlumnos.verAlumnos()
     return jsonify({"alumnos": alumnos}), 200
+
+# Endpoint para ver un alumno en específico
+@alumnos_bp.route('/alumnos/<ci>', methods=['GET'])
+def ver_alumno_ci(ci):
+    alumno = ABMAlumnos.verAlumnoPorCI(ci)
+    if alumno:
+        return jsonify({"alumnos": alumno}), 200
+    return jsonify({"error": "Alumno no encontrado"}), 404

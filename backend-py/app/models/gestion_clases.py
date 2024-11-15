@@ -52,25 +52,37 @@ class GestionClases:
     @staticmethod
     def verClases():
         conexion = DBConnection.conectar_bd()
+        clases = []  # Lista para almacenar los resultados en formato de diccionario
         if conexion:
             cursor = conexion.cursor()
             try: 
                 cursor.execute(
-                "SELECT instructores.nombre, instructores.apellido, actividades.descripcion, "
-                "turnos.hora_inicio, turnos.hora_final, clase.dictada, clase.id "
-                "FROM clase "
-                "JOIN instructores ON clase.ci_instructor = instructores.ci "
-                "JOIN actividades ON clase.id_actividad = actividades.id "
-                "JOIN turnos ON clase.id_turno = turnos.id"
+                    "SELECT instructores.nombre, instructores.apellido, actividades.descripcion, "
+                    "turnos.hora_inicio, turnos.hora_final, clase.dictada, clase.id "
+                    "FROM clase "
+                    "JOIN instructores ON clase.ci_instructor = instructores.ci "
+                    "JOIN actividades ON clase.id_actividad = actividades.id "
+                    "JOIN turnos ON clase.id_turno = turnos.id"
                 )
                 resultados = cursor.fetchall()  
                 if resultados:
-                    for row in resultados: 
-                        print(row)  
+                    for row in resultados:
+                        
+                        clase = {
+                            "nombre_instructor": row[0],
+                            "apellido_instructor": row[1],
+                            "descripcion_actividad": row[2],
+                            "hora_inicio": str(row[3])[:5],
+                            "hora_final": str(row[4])[:5],
+                            "dictada": row[5],
+                            "id_clase": row[6]
+                        }
+                        clases.append(clase)  
                 else:
                     print("No se encontraron clases.")
             except Exception as e:
-                print("Error al mostrar todas las clases")
+                print("Error al mostrar todas las clases:", e)
             finally:
                 cursor.close()
                 conexion.close()
+        return clases  

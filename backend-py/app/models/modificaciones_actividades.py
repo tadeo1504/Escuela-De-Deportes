@@ -1,62 +1,41 @@
-# Obligatorio/modificaciones_actividades.py
-from app.db_connection import DBConnection
-
-
 class ModificacionesActividades:
-
     @staticmethod
-    def agregarDeportes():
-        print("Ingrese el nuevo Deporte:")
-        nuevo_deporte = input()
-        print("Ingrese el id del Deporte")
-        id = input()
-        print("Ingrese el costo que va a tener ")
-        costo = input()
-        print("Deporte agregado")
+    def agregarDeportes(id, nombre, costo):
         conexion = DBConnection.conectar_bd()
         cursor = conexion.cursor()
         try:
-            cursor.execute("INSERT INTO actividades VALUES (?,?,?)", (id, nuevo_deporte, costo))
+            cursor.execute("INSERT INTO actividades VALUES (?, ?, ?)", (id, nombre, costo))
             conexion.commit()
         except Exception as e:
-            print("Error al agregar el deporte:", e)
+            raise Exception(f"Error al agregar el deporte: {e}")
         finally:
             cursor.close()
             conexion.close()
-
-
-
+    
+    # Agrega id como parámetro en eliminarDeportes
     @staticmethod
-    def eliminarDeportes():
-        print("Ingrese el id para eliminar:")
-        ideliminar = input()
-        print("El Deporte fue eliminado")
+    def eliminarDeportes(id):
         conexion = DBConnection.conectar_bd()
         cursor = conexion.cursor()
         try:
-            cursor.execute("DELETE FROM actividades WHERE id = (?)", (ideliminar))
+            cursor.execute("DELETE FROM actividades WHERE id = ?", (id,))
             conexion.commit()
         except Exception as e:
-            print("Error al eliminar el deporte", e)
+            raise Exception(f"Error al eliminar el deporte: {e}")
         finally:
             cursor.close()
             conexion.close()
-
+    
     @staticmethod
     def verDeportes():
         conexion = DBConnection.conectar_bd()
         cursor = conexion.cursor()
         try: 
             cursor.execute("SELECT * FROM actividades")
-            resultados = cursor.fetchall()  
-            if resultados:
-                for actividad in resultados:
-                    print(actividad)  
-            else:
-                print("No se encontraron actividades.")
+            resultados = cursor.fetchall()
+            return [{"id": row[0], "nombre": row[1], "costo": row[2]} for row in resultados]
         except Exception as e:
-            print("Error al mostrar todos los Deportes")
+            raise Exception(f"Error al mostrar todas las actividades: {e}")
         finally:
             cursor.close()
             conexion.close()
-
