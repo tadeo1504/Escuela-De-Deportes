@@ -5,8 +5,9 @@ costo int
 );
 
 CREATE TABLE login (
-correo varchar(20) primary key,
-contraseña varchar(20),
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    username NVARCHAR(50) NOT NULL UNIQUE,
+    password NVARCHAR(255) NOT NULL
 );
 
 create table instructores(

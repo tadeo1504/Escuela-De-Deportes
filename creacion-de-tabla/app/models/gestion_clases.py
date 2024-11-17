@@ -4,7 +4,7 @@ from app.db_connection import DBConnection
 class GestionClases:
 
     @staticmethod
-    def crearClase(ci_instructor, id_actividad, id_turno, dictada, id_clase):
+    def crearClase(ci_instructor, id_actividad, id_turno, dictada):
         """
         Crea una nueva clase en la base de datos con los valores proporcionados.
 
@@ -12,7 +12,6 @@ class GestionClases:
         :param id_actividad: ID de la actividad.
         :param id_turno: ID del turno.
         :param dictada: Estado de la clase ("si" para activa, "no" para inactiva).
-        :param id_clase: ID de la clase (debe ser único).
         """
         print("Para crear la clase, asegúrese de que el instructor, la actividad y el turno estén registrados.")
 
@@ -21,8 +20,8 @@ class GestionClases:
             cursor = conexion.cursor()
             try:
                 cursor.execute(
-                    "INSERT INTO clase (id, ci_instructor, id_actividad, id_turno, dictada) VALUES (?, ?, ?, ?, ?)",
-                    (id_clase, ci_instructor, id_actividad, id_turno, dictada)
+                    "INSERT INTO clase ( ci_instructor, id_actividad, id_turno, dictada) VALUES (?, ?, ?, ?)",
+                    ( ci_instructor, id_actividad, id_turno, dictada)
                 )
                 conexion.commit()
                 print("Clase creada con éxito.")
