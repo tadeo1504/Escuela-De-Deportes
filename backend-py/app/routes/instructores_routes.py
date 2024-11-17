@@ -42,8 +42,6 @@ def modificar_instructor(ci):
 @instructores_bp.route('/instructores', methods=['GET'])
 def ver_instructores():
     instructores = ABMInstructores.verInstructores()
-    if not instructores:
-        return jsonify({"error": "No hay instructores registrados"}), 404
     return jsonify({"instructores": instructores}), 200
 
 # Endpoint para ver un alumno en específico
