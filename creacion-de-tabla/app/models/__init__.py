@@ -1,1 +1,0 @@
-#esto es xa q python lo registre como modulo
