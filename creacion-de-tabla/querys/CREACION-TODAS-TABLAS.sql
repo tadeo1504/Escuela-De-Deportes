@@ -42,7 +42,7 @@ foreign key (id_turno) references turnos(id)
 );
 
 create table alumno_clase(
-id_clase int IDENTITY(1,1),
+id_clase int,
 ci_alumno int,
 id_equipamiento int ,
 foreign key (id_clase) references clase(id),
