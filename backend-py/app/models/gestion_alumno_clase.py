@@ -15,6 +15,26 @@ class GestionAlumnoClase:
                 if cursor.fetchone()[0] > 0:
                     raise Exception("El alumno ya está registrado en esta clase.")
                 
+                # Obtener el turno de la clase a la que se intenta registrar al alumno
+                cursor.execute(
+                    "SELECT id_turno FROM clase WHERE id = ?",
+                    (id_clase,)
+                )
+                turno = cursor.fetchone()
+                if not turno:
+                    raise Exception("El turno asociado a la clase no existe.")
+                turno = turno[0]
+
+                # Verificar si el alumno ya está registrado en otra clase con el mismo turno
+                cursor.execute(
+                    "SELECT COUNT(*) FROM alumno_clase ac "
+                    "JOIN clase c ON ac.id_clase = c.id "
+                    "WHERE ac.ci_alumno = ? AND c.id_turno = ?",
+                    (ci_alumno, turno)
+                )
+                if cursor.fetchone()[0] > 0:
+                    raise Exception("El alumno ya está registrado en otra clase con el mismo turno.")
+                
                 # Insertar el vínculo
                 cursor.execute(
                     "INSERT INTO alumno_clase (ci_alumno, id_clase, id_equipamiento) VALUES (?, ?, ?)",
@@ -56,3 +76,26 @@ class GestionAlumnoClase:
                 cursor.close()
                 conexion.close()
         return alumnos
+
+    @staticmethod
+    def eliminar_alumno_clase(ci_alumno=None, id_clase=None):
+        if not ci_alumno or not id_clase:
+            raise Exception("Debe proporcionar el CI del alumno y el ID de la clase para eliminar el vínculo.")
+        
+        conexion = DBConnection.conectar_bd()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                # Eliminar el vínculo que coincide con el CI del alumno y el ID de la clase
+                cursor.execute(
+                    "DELETE FROM alumno_clase WHERE ci_alumno = ? AND id_clase = ?", 
+                    (ci_alumno, id_clase)
+                )
+                conexion.commit()
+                if cursor.rowcount == 0:
+                    raise Exception("No se encontró ningún vínculo para los datos proporcionados.")
+            except Exception as e:
+                raise Exception(f"Error al eliminar el vínculo: {e}")
+            finally:
+                cursor.close()
+                conexion.close()

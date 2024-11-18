@@ -4,29 +4,31 @@ from app.db_connection import DBConnection
 class GestionClases:
 
     @staticmethod
-    def crearClase():
-        print("Para crear la clase ya debe tener registrado al instructor a cargo, actividad a realizar, el turno, y saber si va a ser clase activa")
-        print("Ingrese la CI del Instructor:")
-        ci_instructor = input()
-        print("Ingrese el id de la Actividad:")
-        id_actividad = input()
-        print("Ingrese el id del turno que se va a realizar")
-        id_turno = input()
-        print("Ingrese si para dar como activa o no para colocarla como inactiva a la clase")
-        dictada = input()
-        print("Instructor asignado con éxito.")
+    def crearClase(ci_instructor, id_actividad, id_turno, dictada):
         conexion = DBConnection.conectar_bd()
         if conexion:
             cursor = conexion.cursor()
             try:
+                # Verificar si el instructor ya tiene una clase en el mismo turno
+                cursor.execute(
+                    "SELECT COUNT(*) FROM clase WHERE ci_instructor = ? AND id_turno = ?",
+                    (ci_instructor, id_turno)
+                )
+                resultado = cursor.fetchone()
+                if resultado[0] > 0:
+                    raise ValueError("El instructor ya tiene una clase asignada en este turno.")
+
+                # Insertar la nueva clase
                 cursor.execute(
                     "INSERT INTO clase (ci_instructor, id_actividad, id_turno, dictada) VALUES (?, ?, ?, ?)",
                     (ci_instructor, id_actividad, id_turno, dictada)
                 )
                 conexion.commit()
-                print("Clase creada con éxito.")
+                return True
+            except ValueError as ve:
+                raise ve
             except Exception as e:
-                print(f"Ocurrió un error al crear la clase: {e}")
+                raise Exception(f"Error al crear la clase: {e}")
             finally:
                 cursor.close()
                 conexion.close()
@@ -86,3 +88,71 @@ class GestionClases:
                 cursor.close()
                 conexion.close()
         return clases  
+
+    @staticmethod
+    def obtener_clase_por_id(id_clase):
+        """Obtiene los datos de una clase específica."""
+        conexion = DBConnection.conectar_bd()
+        clase = None
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                cursor.execute("SELECT ci_instructor, id_actividad, id_turno, dictada FROM clase WHERE id = ?", (id_clase,))
+                resultado = cursor.fetchone()
+                if resultado:
+                    clase = {
+                        "ci_instructor": resultado[0],
+                        "id_actividad": resultado[1],
+                        "id_turno": resultado[2],
+                        "dictada": resultado[3],
+                    }
+            except Exception as e:
+                raise Exception(f"Error al obtener la clase: {e}")
+            finally:
+                cursor.close()
+                conexion.close()
+        return clase
+
+    
+
+    @staticmethod
+    def actualizar_clase(id_clase, nuevos_datos):
+        conexion = DBConnection.conectar_bd()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                # Verificar si el instructor ya tiene una clase en el mismo turno
+                cursor.execute(
+                    "SELECT COUNT(*) FROM clase WHERE ci_instructor = ? AND id_turno = ? AND id != ?",
+                    (
+                        nuevos_datos.get("ci_instructor"),
+                        nuevos_datos.get("id_turno"),
+                        id_clase,
+                    )
+                )
+                resultado = cursor.fetchone()
+                if resultado[0] > 0:
+                    raise ValueError("El instructor ya tiene una clase asignada en este turno.")
+
+                # Actualizar la clase
+                cursor.execute(
+                    "UPDATE clase SET ci_instructor = ?, id_actividad = ?, id_turno = ?, dictada = ? WHERE id = ?",
+                    (
+                        nuevos_datos.get("ci_instructor"),
+                        nuevos_datos.get("id_actividad"),
+                        nuevos_datos.get("id_turno"),
+                        nuevos_datos.get("dictada"),
+                        id_clase,
+                    )
+                )
+                conexion.commit()
+                if cursor.rowcount == 0:
+                    raise Exception("No se encontró la clase para actualizar.")
+            except ValueError as ve:
+                raise ve
+            except Exception as e:
+                raise Exception(f"Error al actualizar la clase: {e}")
+            finally:
+                cursor.close()
+                conexion.close()
+

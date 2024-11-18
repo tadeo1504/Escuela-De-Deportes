@@ -26,3 +26,11 @@ def obtener_alumnos_clase(id_clase):
         return jsonify(alumnos), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@alumno_clase_bp.route('/alumno-clase/<string:ci_alumno>/<int:id_clase>', methods=['DELETE'])
+def eliminar_alumno_por_ci_y_clase(ci_alumno, id_clase):
+    try:
+        GestionAlumnoClase.eliminar_alumno_clase(ci_alumno=ci_alumno, id_clase=id_clase)
+        return jsonify({"mensaje": "Alumno eliminado de la clase con éxito"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

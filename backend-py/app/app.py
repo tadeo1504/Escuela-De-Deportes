@@ -9,6 +9,7 @@ from .routes.turnos_routes import turnos_bp
 from .routes.actividades_routes import actividades_bp
 from .routes.login_routes import login_bp
 from .routes.alumno_clase import alumno_clase_bp
+from .routes.reportes_routes import reportes_bp
 
 
 
@@ -34,7 +35,7 @@ def create_app():
     app.register_blueprint(turnos_bp, url_prefix='/api')
     app.register_blueprint(login_bp, url_prefix='/api')
     app.register_blueprint(alumno_clase_bp, url_prefix='/api')
-
+    app.register_blueprint(reportes_bp, url_prefix='/api')
     # Registrar otros blueprints si es necesario
 
     return app
