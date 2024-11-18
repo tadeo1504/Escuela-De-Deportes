@@ -32,5 +32,8 @@ def modificar_turno(id):
 
 @turnos_bp.route('/turnos/<int:id>', methods=['DELETE'])
 def eliminar_turno(id):
-    ABMTurnos.bajaTurnos(id)
-    return jsonify({"mensaje": "Turno eliminado exitosamente"}), 200
+    try:
+        ABMTurnos.bajaTurnos(id)  
+        return jsonify({"mensaje": "Turno eliminado exitosamente"}), 200  
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400  

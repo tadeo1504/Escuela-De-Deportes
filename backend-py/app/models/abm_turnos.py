@@ -61,7 +61,7 @@ class ABMTurnos:
     @staticmethod
     def bajaTurnos(id):
         """
-        Elimina un turno por su ID.
+        Elimina un turno por su ID, validando si está asignado a una clase.
         
         :param id: ID del turno a eliminar.
         """
@@ -69,10 +69,12 @@ class ABMTurnos:
         if conexion:
             cursor = conexion.cursor()
             try:
-                cursor.execute("SELECT COUNT(*) FROM turnos WHERE id = ?", (id,))
-                if cursor.fetchone()[0] == 0:
-                    raise Exception("El turno no existe y no se puede eliminar.")
+                # Verificar si el turno está asignado a una clase
+                cursor.execute("SELECT COUNT(*) FROM clase WHERE id_turno = ?", (id,))
+                if cursor.fetchone()[0] > 0:
+                    raise Exception("Este turno está asignado a una clase y no puede eliminarse.")
                 
+                # Intentar eliminar el turno
                 cursor.execute("DELETE FROM turnos WHERE id = ?", (id,))
                 conexion.commit()
             except Exception as e:
@@ -80,5 +82,6 @@ class ABMTurnos:
             finally:
                 cursor.close()
                 conexion.close()
+
 
     

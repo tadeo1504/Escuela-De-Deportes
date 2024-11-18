@@ -23,8 +23,11 @@ def alta_instructor():
 # Endpoint para dar de baja a un alumno
 @instructores_bp.route('/instructores/<ci>', methods=['DELETE'])
 def baja_instructor(ci):
-    ABMInstructores.bajaInstructor(ci)
-    return jsonify({"message": "Instructor dado de baja con éxito"}), 200
+    try:
+        ABMInstructores.bajaInstructor(ci)
+        return jsonify({"message": "Instructor dado de baja con éxito"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 
 @instructores_bp.route('/instructores/<ci>', methods=['PUT'])

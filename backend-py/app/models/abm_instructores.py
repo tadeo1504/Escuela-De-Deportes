@@ -19,6 +19,15 @@ class ABMInstructores:
         conexion = DBConnection.conectar_bd()
         if conexion:
             cursor = conexion.cursor()
+            
+            cursor.execute("SELECT * FROM clase WHERE ci_instructor = ?", (ci,))
+            asignacion = cursor.fetchone()
+            
+            if asignacion:
+                cursor.close()
+                conexion.close()
+                raise Exception("Este instructor está asignado a un curso y no puede ser eliminado.")
+            
             cursor.execute("DELETE FROM instructores WHERE ci = ?", (ci,))
             conexion.commit()
             cursor.close()

@@ -61,3 +61,4 @@ class ModificacionesActividades:
         finally:
             cursor.close()
             conexion.close()
+
