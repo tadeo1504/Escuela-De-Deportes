@@ -1,7 +1,7 @@
-create table actividades(
-id int primary key IDENTITY(1,1),
-descripcion varchar(50),
-costo int
+CREATE TABLE actividades (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    descripcion VARCHAR(50),
+    costo INT
 );
 
 CREATE TABLE login (
@@ -10,54 +10,50 @@ CREATE TABLE login (
     password NVARCHAR(255) NOT NULL
 );
 
-create table instructores(
-ci int primary key,
-nombre varchar(15),
-apellido varchar(15)
+CREATE TABLE instructores (
+    ci INT PRIMARY KEY,
+    nombre VARCHAR(15),
+    apellido VARCHAR(15)
 );
 
-create table turnos(
-id int primary key IDENTITY(1,1),
-hora_inicio TIME,
-hora_final TIME
+CREATE TABLE turnos (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    hora_inicio TIME,
+    hora_final TIME
 );
 
-
-create table alumnos(
-ci int primary key,
-nombre varchar(15),
-apellido varchar(15),
-fecha_nacimiento date
+CREATE TABLE alumnos (
+    ci INT PRIMARY KEY,
+    nombre VARCHAR(15),
+    apellido VARCHAR(15),
+    fecha_nacimiento DATE
 );
 
-create table clase(
-ci_instructor int,
-id_actividad int,
-id_turno int ,
-dictada DATE,
-id int primary key IDENTITY(1,1),
-foreign key (id_actividad) references actividades(id),
-foreign key (ci_instructor) references instructores(ci),
-foreign key (id_turno) references turnos(id)
+CREATE TABLE clase (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    ci_instructor INT,
+    id_actividad INT,
+    id_turno INT,
+    dictada DATE,
+    FOREIGN KEY (ci_instructor) REFERENCES instructores(ci),
+    FOREIGN KEY (id_actividad) REFERENCES actividades(id),
+    FOREIGN KEY (id_turno) REFERENCES turnos(id)
 );
 
-create table alumno_clase(
-id_clase int,
-ci_alumno int,
-id_equipamiento int ,
-foreign key (id_clase) references clase(id),
-foreign key (ci_alumno) references alumnos(ci),
-foreign key (id_equipamiento) references equipamiento(id)
+CREATE TABLE equipamiento (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    id_actividad INT,
+    descripcion VARCHAR(30),
+    costo INT,
+    FOREIGN KEY (id_actividad) REFERENCES actividades(id)
 );
 
-create table equipamiento(
-id int primary key IDENTITY(1,1) ,
-id_actividad int,
-descripcion varchar(30),
-costo int,
-foreign key (id_actividad) references actividades(id),
-);
-foreign key (id_clase) references clase(id),
-foreign key (ci_alumno) references alumnos(ci),
-foreign key (id_equipamiento) references equipamiento(id)
+CREATE TABLE alumno_clase (
+    id_clase INT,
+    ci_alumno INT,
+    id_equipamiento INT,
+    PRIMARY KEY (id_clase, ci_alumno, id_equipamiento),
+    FOREIGN KEY (id_clase) REFERENCES clase(id),
+    FOREIGN KEY (ci_alumno) REFERENCES alumnos(ci),
+    FOREIGN KEY (id_equipamiento) REFERENCES equipamiento(id)
 );
