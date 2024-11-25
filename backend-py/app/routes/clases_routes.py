@@ -9,8 +9,21 @@ def obtener_clases():
     clases = GestionClases.verClases()
     return jsonify(clases)
 
-from flask import jsonify, request
-from datetime import date
+@clases_bp.route('/clases/<int:id_clase>', methods=['DELETE'])
+def eliminar_clase(id_clase):
+    try:
+        clase = GestionClases.obtener_clase_por_id(id_clase)
+        if not clase:
+            return jsonify({"error": "Clase no encontrada"}), 404
+            
+        if clase["dictada"] == str(date.today()):
+            return jsonify({"error": "La clase no puede ser eliminada el día en que se dicta"}), 400
+            
+        GestionClases.eliminarClase(id_clase)
+        return jsonify({"mensaje": "Clase eliminada exitosamente"}), 200
+    except Exception as e:
+        return jsonify({"error": "Error interno: " + str(e)}), 500
+
 
 @clases_bp.route('/clases/<int:id_clase>', methods=['PUT'])
 def modificar_clase(id_clase):

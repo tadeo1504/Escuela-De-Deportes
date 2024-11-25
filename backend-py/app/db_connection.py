@@ -21,8 +21,8 @@ class DBConnection:
             #Conexion de TADEO D.
             conexion = pyodbc.connect(
                 'DRIVER={SQL Server};'
-                'SERVER=LAPTOP-K7AU665T;'  
-                'DATABASE=Obligatorio;'      
+                'SERVER=LAPTOP-OMEVDG9L;'  
+                'DATABASE=OBLIGATORIO-BASE-DE-DATOS;'      
                 'Trusted_Connection=yes;' 
             )
             return conexion

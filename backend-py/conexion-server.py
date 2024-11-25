@@ -3,7 +3,7 @@ import pyodbc
 
 # Configura tu conexión
 server = 'LAPTOP-OMEVDG9L'
-database = 'OBLIGATORIO'     
+database = 'OBLIGATORIO-BASE-DE-DATOS'     
 connection_string = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
 
 try:
