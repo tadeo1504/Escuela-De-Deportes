@@ -34,19 +34,16 @@ class GestionClases:
                 conexion.close()
             
     @staticmethod
-    def eliminarClase():
-        print("Ingrese el ID de la clase que desea eliminar:")
-        id_clase = input()
+    def eliminarClase(id_clase):
         conexion = DBConnection.conectar_bd()
         if conexion:
             cursor = conexion.cursor()
             try:
-                cursor.execute("DELETE FROM clase WHERE id = ?", (id_clase))
-                clase = cursor.fetchone()
+                cursor.execute("DELETE FROM clase WHERE id = ?", (id_clase,))
                 conexion.commit()
-                print("Clase eliminada con éxito.")
+                return True
             except Exception as e:
-                print(f"Ocurrió un error al eliminar la clase: {e}")
+                raise Exception(f"Error al eliminar la clase: {e}")
             finally:
                 cursor.close()
                 conexion.close()
