@@ -21,13 +21,19 @@ class ModificacionesActividades:
         conexion = DBConnection.conectar_bd()
         cursor = conexion.cursor()
         try:
+            # Eliminar dependencias en la tabla equipamiento
+            cursor.execute("DELETE FROM equipamiento WHERE id_actividad = ?", (id,))
+            # Luego eliminar el registro en actividades
             cursor.execute("DELETE FROM actividades WHERE id = ?", (id,))
             conexion.commit()
         except Exception as e:
+            # Relanzar una excepción personalizada para manejarla en otros niveles
             raise Exception(f"Error al eliminar el deporte: {e}")
         finally:
+            # Cerrar siempre la conexión, sea cual sea el resultado
             cursor.close()
             conexion.close()
+
     
     @staticmethod
     def verDeportes():
