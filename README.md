@@ -40,3 +40,23 @@
 </div>
 
 ###
+
+• Instructivo completo para correr la aplicación de forma local
+
+Clonar el repositorio
+
+Abre una terminal y ejecuta: git clone https://github.com/GTula/front-obligatorio.git
+Cambia al directorio del proyecto: cd backend-py
+Instalar dependencias
+
+En la terminal, asegúrate de estar en el directorio del proyecto. Ejecuta: 
+- pip install flask
+- pip install flask-cors
+- pip install pyodbc
+- pip install Flask-Caching
+
+- Copiar las tablas que se encuentran en el archivo sql CREACION-TODAS-TABLAS dentro de la carpeta CREATE-AND-INSERTS
+- Copiar los inserts que se encuentran en el archivo algunos-inserts dentro de la carpeta CREATE-AND-INSERTS
+
+Finalmente, correr la aplicación:
+en la terminal dentro de la carpeta backend-py ejecutar: py run.py
